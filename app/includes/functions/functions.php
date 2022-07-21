@@ -59,3 +59,16 @@ function seen1($id)
         echo false;
     }
 }
+///isthereanymessages function /////////////////////////////////
+function isthereanymessages($id)
+{
+    $obj1 = new connection();
+    $stmt = $obj1->con()->prepare("SELECT * FROM `messages` WHERE message_from = $id OR message_to = $id");
+    $stmt->execute();
+    $count = $stmt->rowCount();
+    if ($count == 0) {
+        return false;
+    } else {
+        return true;
+    }
+}

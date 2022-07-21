@@ -3,6 +3,7 @@ $(document).ready(function(){
     let i =0;
     let count = 0;
     let x9 ;
+    let singlechat;
     /////////////////////////////////////////////////////
 
 $(".btn-chat").click(function(){
@@ -22,7 +23,7 @@ $(".btn-chat").click(function(){
 
 
     ///////////////////////////////////////
-    setInterval(() => {
+  singlechat =    setInterval(() => {
 
          
        
@@ -36,7 +37,7 @@ $.post("updateseen2.php", {val : i} );
 
 
 
-    },1000);
+    },3000);
     
     setInterval(() => {
       i = whichHasActive();
@@ -86,6 +87,7 @@ $.post("updateseen2.php", {val : i} );
 ////////////////sync active class on clicking singlechat////////////////////
 $(".chatapp").on("click",".singelchat",function(){
     count = 0;
+    clearInterval(singlechat);
  i = $(this).data("id");
 $(this).addClass("active");
 $(this).siblings(".singelchat").removeClass("active");
@@ -93,7 +95,23 @@ let divs = document.querySelectorAll(".message-body  div");
 divs = Array.from(divs);
 let lastdiv = divs.slice(-1);
 $(lastdiv).addClass("lastman");
+
 $(".message-body").scrollTop($('.lastman').offset().top);
+singlechat =    setInterval(() => {
+
+         
+       
+    $(".chat-container").load("ajaxsec.php",{count : i,like:serial});
+    
+    
+      
+    $.post("updateseen2.php", {val : i} );
+              
+            
+    
+    
+    
+        },3000);
 });
 //check which element has active class 
 function whichHasActive(){
@@ -167,4 +185,5 @@ $(".message-tools input").keypress(function (e) {
   $(".message-tools input").change(function(){
     $.post("updateseen2.php", {writing : i} );
   });
+  
 });

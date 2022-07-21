@@ -18,6 +18,12 @@ if (isset($_POST['val'])) {
     $id = isset($_SESSION['id']) ? $_SESSION['id'] : $_COOKIE['id'];
     $stmt = $obj1->con()->prepare("UPDATE `users` SET `is_writing` = $writing WHERE `users`.`id` = $id");
     $stmt->execute();
+} else if (isset($_POST['blur'])) {
+    $obj1 = new connection();
+
+    $id = isset($_SESSION['id']) ? $_SESSION['id'] : $_COOKIE['id'];
+    $stmt = $obj1->con()->prepare("UPDATE `users` SET `is_writing` = 0 WHERE `users`.`id` = $id");
+    $stmt->execute();
 }
 
 

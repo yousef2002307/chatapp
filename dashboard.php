@@ -85,7 +85,7 @@ if (isset($_SESSION['id']) || isset($_COOKIE['id'])) {
                     <div class="header">
                         <div class="d-flex">
                             <img src="app/layout/img//images.jpg" />
-                            <bold>Username</bold>
+                            <bold></bold>
                             <span>i</span>
                         </div>
                     </div>
@@ -150,18 +150,29 @@ if (isset($_SESSION['id']) || isset($_COOKIE['id'])) {
 
 
                     </div>
-                    <div class="message-tools d-flex">
+                    <?php
+                    $id = isset($_SESSION['id']) ? $_SESSION['id'] : $_COOKIE['id'];
+                    if (isthereanymessages($id)) {
+                    ?>
+                        <div class="message-tools d-flex">
 
-                        <div>
-                            <input type="text" placeholder="write your message header" />
+                            <div>
+                                <input type="text" placeholder="write your message header" />
+                            </div>
+                            <i class="fas fa-thumbs-up"></i>
+
                         </div>
-                        <i class="fas fa-thumbs-up"></i>
-
-                    </div>
                 </div>
+
                 <div class="user pad">
                     <p> welcome man to our app </p>
                 </div>
+            <?php
+
+
+                    } else {
+                    }
+            ?>
             </div>
 
 
@@ -288,6 +299,96 @@ if (isset($_SESSION['id']) || isset($_COOKIE['id'])) {
             </div>
             </secton>
             <!-- navbar-->
+        <?php
+    } elseif ($page == 'suggest') {
+        $obj131 = new dashboardClass("weal", "hjjh");
+        ?>
+            <!-- my html code -->
+            <section class="dashboard">
+                <!-- navbar-->
+                <nav class="navbar">
+                    <div>
+                        <a href='<?php echo $url ?>/dashboard.php'><img src="<?php echo $url ?>/app/layout/img/chat-app-icon-logo-design-template-770ca6add87165646ba67d1a36dfee4e_screen-removebg-preview.png" /></a>
+                    </div>
+                    <div>
+                        <form class="form-inline my-2 my-lg-0" method="POST" action="?page=search">
+                            <input required name='search' class="form-control mr-sm-2" type="search" placeholder="Search for friends using username" aria-label="Search">
+                            <button class="btn btn-outline-success my-2 my-sm-0" type="submit"> Search</button>
+
+                        </form>
+                    </div>
+
+
+                    <div>
+                        <span class="span">setting <i class="fas fa-cog"></i></span>
+                        <ul class="list-unstyled">
+                            <li><a href='<?php echo $url . "/dashboard.php?page=default" ?>'>Home</a></li>
+                            <li><a href='<?php echo $_SERVER['PHP_SELF'] ?>?page=edit'>your profile</a></li>
+                            <li> <a href='<?php echo $url ?>/logout.php'> log out</a></li>
+
+                        </ul>
+                        <?php
+
+                        //echo "<a href='" . $url . "/logout.php'>" . lang("logout") . " </a>";
+
+                        ?>
+
+                    </div>
+                </nav>
+
+                <!-- navbar-->
+
+                <div class="results py-5">
+                    <?php
+                    $id = isset($_SESSION['id']) ? $_SESSION['id'] : $_COOKIE['id'];
+
+                    $stmt =  $obj131->con()->prepare('SELECT * FROM `users` WHERE  id != ? LIMIT 5');
+                    $stmt->execute(array($id));
+                    $count = $stmt->rowCount();
+                    $rows = $stmt->fetchAll();
+
+
+
+                    foreach ($rows as $row) {
+                        echo '<div class="mb-5" data-id="' . $row['id'] . '">';
+                        if ($row['image'] == '') {
+                            echo "<img src='app/uploads/images.jpg'>";
+                        } else {
+
+
+                            echo "<img src='app/uploads/" . $row['image'] . "'>";
+                        }
+                        echo '<bold>' . $row['username'] . "</bold>";
+                        echo ' <button class="btn btn-danger btn-chat">chat with him and say hi</button>';
+                        echo '<div class="clearfix"></div>';
+                        echo " </div>";
+                    }
+
+
+
+
+
+                    ?>
+
+                    <!--
+                    <div class="mb-5">
+                        username
+                        <button class="btn btn-danger">chat with him and say hi</button>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="mb-5">
+                        username
+                        <button class="btn btn-danger">chat with him and say hi</button>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="mb-5">
+                        username
+                        <button class="btn btn-danger">chat with him and say hi</button>
+                        <div class="clearfix"></div>
+                    </div>
+    -->
+                </div>
+            </section>
         <?php
     } elseif ($page == 'search') {
         $search = $_POST['search'];
